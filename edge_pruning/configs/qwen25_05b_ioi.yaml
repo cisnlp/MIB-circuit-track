@@ -1,0 +1,22 @@
+model:
+  name: llama                # same wrapper; Qwen-2.5 is Llama-style
+  checkpoint: Qwen/Qwen2.5-0.5B
+
+task:
+  name: ioi
+  data_path: data/ioi
+  split: train
+  batch_size: 16
+
+optim:
+  lr: 2.0e-4
+  betas: [0.9, 0.98]
+  wd: 0.05
+  warmup_steps: 300
+  max_steps: 2500
+  beta: 1.0e-4
+
+seed: 1
+log_every: 25
+eval_every: 250
+output_dir: runs/qwen25_05b_ioi_ep

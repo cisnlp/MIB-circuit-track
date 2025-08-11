@@ -1,0 +1,22 @@
+model:
+  name: llama
+  checkpoint: meta-llama/llama-3.1-8b
+
+task:
+  name: ioi
+  data_path: data/ioi
+  split: train
+  batch_size: 2              # fits ~24 GB GPU with writer-axis
+
+optim:
+  lr: 8.0e-5
+  betas: [0.9, 0.95]
+  wd: 0.1
+  warmup_steps: 400
+  max_steps: 1500
+  beta: 5.0e-5
+
+seed: 0
+log_every: 10
+eval_every: 100
+output_dir: runs/llama31_8b_ioi_ep

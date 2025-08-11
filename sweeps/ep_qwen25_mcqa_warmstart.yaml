@@ -1,0 +1,55 @@
+program: scripts/run_ep.py
+project: mib-edge-pruning
+name: ep-qwen25-mcqa-new-warmstart
+metric:
+  name: eval/cmd_minus_cpr
+  goal: minimize
+
+method: bayes
+parameters:
+  edge_learning_rate:
+    values: [0.03, 0.4, 0.8]
+  layer_learning_rate:
+    values: [0.03, 0.4, 0.8]
+  reg_edge_learning_rate:
+    values: [0.001, 0.4, 0.8]
+  reg_layer_learning_rate:
+    values: [0.001, 0.4, 0.8]
+  target_edge_sp:
+    values: [0.975, 0.99, 1.05]
+  target_layer_sp:
+    values: [0.4, 0.69]
+  warmup_steps:
+    values: [50, 250, 500]
+  start_edge_sp:
+    values: [0.8, 0.9, 0.95]
+  disable_node_loss:
+    values: [true, false]
+  signs_from_file:
+    values: [true, false]
+
+command:
+  - python3
+  - ${program}
+  - --sweep
+  - --models
+  - "qwen2.5"
+  - --tasks
+  - mcqa
+  - --cache_dir
+  - "/nfs/gdata/llms/hf-models"
+  - --output_root
+  - "/nfs/gdata/pmondorf/projects/MIB-circuit-track/edge-pruning/results"
+  - --warmstart_scores_path
+  - "circuits/EAP-IG-inputs_patching_edge/mcqa_qwen2.5/importances.json"
+  - --warmstart_absolute
+  - --max_steps
+  - 1000
+  - --batch_size
+  - 10
+  - --start_layer_sp
+  - 0.00
+  - --warmup_type
+  - "linear"
+  - --with_embedding_nodes
+  - ${args_no_boolean_flags}
